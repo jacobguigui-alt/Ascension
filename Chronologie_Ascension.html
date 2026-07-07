@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ascension — Chronologie de la saga</title>
+<style>
+  :root{
+    --nuit:#0d0b14;
+    --surface:#16121f;
+    --surface2:#1d1729;
+    --trait:#2c2440;
+    --ivoire:#e9e3d4;
+    --gris:#9d94ad;
+    --or:#d3a748;
+    --rouge:#c05a52;
+    --violet:#9a6fd0;
+    --bleu:#6b8fd6;
+    --display:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+    --body:Georgia,"Times New Roman",serif;
+    --ui:"Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto} *{transition:none!important;animation:none!important}}
+  body{background:var(--nuit);color:var(--ivoire);font-family:var(--body);line-height:1.55;
+       background-image:radial-gradient(ellipse 60% 40% at 70% -5%, rgba(154,111,208,.10), transparent 60%),
+                        radial-gradient(ellipse 50% 35% at 10% 0%, rgba(107,143,214,.07), transparent 60%);}
+  a{color:var(--or)}
+  button{font-family:var(--ui)}
+
+  /* ——— entête ——— */
+  header{position:sticky;top:0;z-index:50;background:rgba(13,11,20,.92);backdrop-filter:blur(6px);
+         border-bottom:1px solid var(--trait);padding:.9rem 1.4rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+  .brand{display:flex;flex-direction:column;line-height:1.15;margin-right:auto}
+  .brand .eyebrow{font-family:var(--ui);font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gris)}
+  .brand h1{font-family:var(--display);font-weight:600;font-size:1.35rem;letter-spacing:.04em}
+  .brand h1 em{font-style:normal;color:var(--or)}
+  .views{display:flex;border:1px solid var(--trait);border-radius:999px;overflow:hidden}
+  .views button{background:transparent;color:var(--gris);border:0;padding:.45rem 1.1rem;font-size:.78rem;
+                letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+  .views button.on{background:var(--surface2);color:var(--ivoire)}
+  .views button:focus-visible,.chip:focus-visible,.mm-node:focus-visible,.evt:focus-visible{outline:2px solid var(--or);outline-offset:2px}
+
+  /* ——— barre de filtres ——— */
+  .filters{position:sticky;top:64px;z-index:40;background:rgba(13,11,20,.92);backdrop-filter:blur(6px);
+           border-bottom:1px solid var(--trait);padding:.7rem 1.4rem;display:flex;flex-wrap:wrap;gap:.45rem;align-items:center}
+  .filters .lbl{font-family:var(--ui);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gris);margin-right:.2rem}
+  .chip{border:1px solid var(--trait);background:transparent;color:var(--gris);border-radius:999px;
+        padding:.28rem .75rem;font-size:.74rem;cursor:pointer;transition:all .15s}
+  .chip.on{color:var(--nuit);background:var(--or);border-color:var(--or);font-weight:600}
+  .chip[data-kind="tome"].on{background:var(--bleu);border-color:var(--bleu)}
+  .search{margin-left:auto;background:var(--surface);border:1px solid var(--trait);border-radius:999px;
+          color:var(--ivoire);font-family:var(--ui);font-size:.8rem;padding:.4rem .9rem;min-width:190px}
+  .search::placeholder{color:var(--gris)}
+  .count{font-family:var(--ui);font-size:.7rem;color:var(--gris)}
+
+  /* ——— légende ——— */
+  .legend{display:flex;flex-wrap:wrap;gap:1rem;padding:1rem 1.4rem 0;font-family:var(--ui);font-size:.72rem;color:var(--gris)}
+  .legend span{display:inline-flex;align-items:center;gap:.4rem}
+  .dot{width:9px;height:9px;transform:rotate(45deg);display:inline-block}
+
+  /* ——— frise ——— */
+  main{max-width:1120px;margin:0 auto;padding:1.2rem 1.4rem 6rem}
+  .era{margin-top:2.8rem}
+  .era-head{display:flex;align-items:baseline;gap:.9rem;border-bottom:1px solid var(--trait);padding-bottom:.5rem;margin-bottom:1.6rem}
+  .era-head .num{font-family:var(--display);font-size:1rem;color:var(--or);letter-spacing:.1em}
+  .era-head h2{font-family:var(--display);font-weight:600;font-size:1.45rem;letter-spacing:.03em}
+  .era-head .sub{font-family:var(--ui);font-size:.72rem;color:var(--gris);letter-spacing:.05em}
+  .era-flag{font-family:var(--ui);font-size:.66rem;color:var(--nuit);background:var(--or);border-radius:4px;padding:.1rem .45rem;letter-spacing:.06em}
+
+  .spine{position:relative;padding-left:2.1rem}
+  .spine::before{content:"";position:absolute;left:.55rem;top:.4rem;bottom:.4rem;width:1px;
+                 background:linear-gradient(to bottom, transparent, var(--trait) 8%, var(--trait) 92%, transparent)}
+  .evt{position:relative;margin-bottom:1.15rem;background:var(--surface);border:1px solid var(--trait);
+       border-left:3px solid var(--c,var(--or));border-radius:8px;padding:.85rem 1rem .9rem;cursor:default;
+       transition:transform .15s, border-color .15s}
+  .evt:hover{transform:translateX(3px);border-color:#3b3157;border-left-color:var(--c,var(--or))}
+  .evt::before{content:"✦";position:absolute;left:-1.98rem;top:.95rem;color:var(--c,var(--or));font-size:.85rem;line-height:1;
+               text-shadow:0 0 8px rgba(211,167,72,.35)}
+  .evt .per{font-family:var(--ui);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gris)}
+  .evt h3{font-family:var(--display);font-size:1.08rem;font-weight:600;margin:.15rem 0 .3rem;letter-spacing:.02em}
+  .evt p{font-size:.9rem;color:#cfc8bc}
+  .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem}
+  .tag{font-family:var(--ui);font-size:.64rem;color:var(--gris);border:1px solid var(--trait);border-radius:999px;padding:.08rem .5rem}
+  .tag.flag-arb{color:var(--nuit);background:var(--or);border-color:var(--or);font-weight:600}
+  .tag.flag-sec{color:var(--nuit);background:var(--bleu);border-color:var(--bleu);font-weight:600}
+  .tag.flag-prop{color:var(--nuit);background:var(--violet);border-color:var(--violet);font-weight:600}
+  .tag.tome{color:#cfc8bc;border-color:#3b3157}
+
+  /* ——— tresse du tome 2 ——— */
+  .braid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+  .braid .lane{position:relative}
+  .lane-head{font-family:var(--display);font-size:.95rem;letter-spacing:.05em;color:var(--lc);border-bottom:1px dashed var(--trait);
+             padding:0 0 .4rem .2rem;margin-bottom:1rem}
+  .lane-head small{display:block;font-family:var(--ui);font-size:.64rem;color:var(--gris);letter-spacing:.12em;text-transform:uppercase}
+  .lane .spine{padding-left:1.7rem}
+  .lane .spine::before{background:linear-gradient(to bottom, transparent, var(--lc) 8%, var(--lc) 92%, transparent);opacity:.45}
+  .lane .evt::before{left:-1.55rem;color:var(--lc)}
+  .braid-note{font-family:var(--ui);font-size:.72rem;color:var(--gris);margin:-0.6rem 0 1.2rem;letter-spacing:.04em}
+  .converge{display:flex;align-items:center;gap:.8rem;margin:1.4rem 0 1.6rem;color:var(--gris);font-family:var(--ui);
+            font-size:.7rem;letter-spacing:.24em;text-transform:uppercase}
+  .converge::before,.converge::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--trait),transparent)}
+
+  /* ——— carte mentale ——— */
+  #carte{display:none;max-width:1120px;margin:0 auto;padding:1.6rem 1.4rem 6rem}
+  .mm-root>.mm-label{font-family:var(--display);font-size:1.5rem;color:var(--or);letter-spacing:.06em;
+                     border:1px solid var(--or);border-radius:12px;display:inline-block;padding:.5rem 1.3rem;
+                     background:rgba(211,167,72,.06)}
+  .mm-children{margin-left:1.35rem;padding-left:1.35rem;border-left:1px solid var(--trait)}
+  .mm-node{margin:.65rem 0;position:relative}
+  .mm-node::before{content:"";position:absolute;left:-1.35rem;top:1.05rem;width:1.05rem;height:1px;background:var(--trait)}
+  .mm-label{display:inline-flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--trait);
+            border-left:3px solid var(--c,var(--trait));border-radius:8px;padding:.4rem .85rem;cursor:pointer;
+            font-family:var(--display);font-size:.98rem;transition:border-color .15s}
+  .mm-label:hover{border-color:#3b3157;border-left-color:var(--c,var(--or))}
+  .mm-label .n{font-family:var(--ui);font-size:.64rem;color:var(--gris)}
+  .mm-label .tw{font-family:var(--ui);font-size:.75rem;color:var(--gris);width:1em;text-align:center;transition:transform .15s}
+  .mm-node.open>.mm-label .tw{transform:rotate(90deg)}
+  .mm-node>.mm-children{display:none}
+  .mm-node.open>.mm-children{display:block}
+  .mm-leaf{font-family:var(--body);font-size:.86rem;color:#cfc8bc;background:transparent;border:0;border-left:2px solid var(--c,var(--trait));
+           padding:.15rem 0 .15rem .7rem;margin:.45rem 0;display:block;position:relative}
+  .mm-leaf::before{content:"";position:absolute;left:-1.35rem;top:.85rem;width:1.2rem;height:1px;background:var(--trait)}
+  .mm-leaf b{font-family:var(--display);font-weight:600;color:var(--ivoire);letter-spacing:.02em}
+  .mm-leaf small{display:block;color:var(--gris);font-family:var(--ui);font-size:.7rem;margin-top:.1rem}
+
+  .empty{padding:3rem 0;text-align:center;color:var(--gris);font-family:var(--ui);font-size:.85rem;display:none}
+
+  footer{border-top:1px solid var(--trait);padding:1.2rem 1.4rem 2rem;color:var(--gris);font-family:var(--ui);
+         font-size:.72rem;max-width:1120px;margin:0 auto}
+
+  @media (max-width:900px){
+    .braid{grid-template-columns:1fr}
+    header{padding:.8rem 1rem}
+    .filters{top:96px;padding:.6rem 1rem}
+    .search{min-width:130px}
+    main,#carte,footer{padding-left:1rem;padding-right:1rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="eyebrow">Saga en trois tomes · document de travail</span>
+    <h1><em>Ascension</em> — Chronologie de la saga</h1>
+  </div>
+  <div class="views" role="tablist" aria-label="Changer de vue">
+    <button id="btnFrise" class="on" role="tab" aria-selected="true">Frise</button>
+    <button id="btnCarte" role="tab" aria-selected="false">Carte mentale</button>
+  </div>
+</header>
+
+<div class="filters" id="filters">
+  <span class="lbl">Tomes</span>
+  <span class="lbl" style="margin-left:.6rem">Fils</span>
+  <input type="search" class="search" id="q" placeholder="Rechercher un événement…" aria-label="Rechercher">
+  <span class="count" id="count"></span>
+</div>
+
+<div class="legend">
+  <span><i class="dot" style="background:var(--or)"></i> Les héros</span>
+  <span><i class="dot" style="background:var(--rouge)"></i> Les antagonistes</span>
+  <span><i class="dot" style="background:var(--violet)"></i> Le Chaînon Noir &amp; le culte</span>
+  <span><i class="dot" style="background:var(--bleu)"></i> Le monde &amp; le secret</span>
+  <span style="margin-left:auto"><span class="tag flag-arb">à arbitrer</span> <span class="tag flag-sec">secret du monde</span> <span class="tag flag-prop">proposition</span></span>
+</div>
+
+<main id="frise"></main>
+<div class="empty" id="empty">Aucun événement ne correspond aux filtres actifs.</div>
+<section id="carte" aria-label="Carte mentale de la saga"></section>
+
+<footer>
+  Établi le 7 juillet 2026 à partir du manuscrit du Tome 1, des déroulés des Tomes 2 et 3, de l'encyclopédie et de la Bible d'Ascension v1.
+  Repère : J0 = rituel du prologue du Tome 1. Les événements marqués « à arbitrer » renvoient aux points en suspens de la bible.
+</footer>
+
+<script>
+const CAMPS={heros:"var(--or)",antag:"var(--rouge)",culte:"var(--violet)",monde:"var(--bleu)"};
+const TOMES=["Origines","Avant T1","Tome 1","Tome 2","Entre-deux","Tome 3"];
+const FILS=["Visérya","Giovanni","Sylvana","Quentin","Valérya","Garde · Traqueur","Nadariel · Orun","Maeridia & la Meute","Nevarim","Monde & secret"];
+
+/* ————— ÉRES ————— */
+const ERAS=[
+ {id:"A",num:"I",titre:"L'Ère des Origines",sub:"chronologie secrète du monde — connue de la seule 13e Clé",tome:"Origines",mode:"single"},
+ {id:"B",num:"II",titre:"Avant le Tome 1",sub:"les racines des Quatre et de leurs ombres",tome:"Avant T1",mode:"single"},
+ {id:"C",num:"III",titre:"Tome 1 — L'Alliance des Quatre",sub:"de J0 au ré-ancrage du sanctuaire",tome:"Tome 1",mode:"single"},
+ {id:"D",num:"IV",titre:"Tome 2 — le récit tressé",sub:"trois fils simultanés après le drame du sanctuaire",tome:"Tome 2",mode:"braid",
+  lanes:[{k:1,t:"Arc I — Ambition Valenth",s:"château Valenth",c:"var(--rouge)"},
+         {k:2,t:"Arc II — La Traque de l'Ombre",s:"Visérya & Garde",c:"var(--or)"},
+         {k:3,t:"Arc III — Les Larmes de Velmira",s:"Sylvana & Giovanni",c:"var(--violet)"}]},
+ {id:"E",num:"V",titre:"Tome 2 — Arc IV, le dénouement",sub:"convergence au château Valenth",tome:"Tome 2",mode:"single"},
+ {id:"F",num:"VI",titre:"Entre les tomes",sub:"la mue de l'ennemi",tome:"Entre-deux",mode:"single"},
+ {id:"G",num:"VII",titre:"Tome 3 — Acte I : l'Embrasement",sub:"Sahrak — durée des ellipses à arbitrer",tome:"Tome 3",mode:"single",flag:"chronologie à arbitrer"},
+ {id:"H",num:"VIII",titre:"Tome 3 — Actes II & III",sub:"Thorngarde, puis la guerre franchit la mer",tome:"Tome 3",mode:"single"},
+ {id:"I",num:"IX",titre:"Tome 3 — Acte IV & épilogue",sub:"le Jugement des Dieux, Nal'Tharuun",tome:"Tome 3",mode:"single"}
+];
+
+/* ————— ÉVÉNEMENTS ————— */
+/* per: période affichée · camp: heros/antag/culte/monde · fils: index dans FILS · fl: arb/sec/prop */
+const E=[
+/* A — Origines */
+ {era:"A",per:"−10 000",t:"La Guerre des Deux Voies",d:"Deux civilisations avancées s'affrontent : la science contre la foi. Au cœur du conflit, les recherches sur l'âme et la transcendance.",camp:"monde",fils:[9],fl:["sec"]},
+ {era:"A",per:"−9 950",t:"Premières Ascensions",d:"Une poignée d'âmes transcendent la chair et deviennent énergie pure. Les premières distorsions magiques apparaissent.",camp:"monde",fils:[9],fl:["sec"]},
+ {era:"A",per:"−9 940",t:"Le Cataclysme",d:"Le monde s'effondre ; la magie actuelle naît des âmes sacrifiées. Les survivants jurent le silence — les Ascendants deviendront les « dieux ».",camp:"monde",fils:[9],fl:["sec"]},
+ {era:"A",per:"−9 940 env.",t:"La chute de Tharuun",d:"Premier Ascendant sombré dans la folie de l'absolu, il est emprisonné dans le cristal du sanctuaire. La jungle en gardera le nom : Nal'Tharuun, « la Geôle de Tharuun ».",camp:"culte",fils:[9],fl:["sec","arb"]},
+ {era:"A",per:"−9 930 → −9 000",t:"Les gardiens du silence",d:"Reconstruction fragile ; cultes primitifs autour des Ascendants. Les survivants du Cataclysme fondent la 13e Clé, gardienne du secret des origines.",camp:"monde",fils:[9],fl:["sec"]},
+ {era:"A",per:"−7 000",t:"Les Marques Oubliées",d:"Premières Marques : des constellations gravées dans la chair d'élus que nul ne choisit. L'Est les étudiera, l'Ouest les encadrera.",camp:"monde",fils:[9]},
+ {era:"A",per:"−4 000",t:"Est et Ouest",d:"Consolidation des empires post-cataclysmiques. La séparation des deux continents se fige autour de la Mer des Lamentations.",camp:"monde",fils:[9]},
+ {era:"A",per:"−1 000 → −200",t:"Guerres et paix fragile",d:"Conflits majeurs entre les continents. La dernière guerre s'achève deux siècles avant le récit ; la paix actuelle n'est qu'une trêve.",camp:"monde",fils:[9]},
+/* B — Avant T1 */
+ {era:"B",per:"Enfance",t:"L'orphelinat de Valdarrin",d:"Visérya grandit en défendant sa cadette Valérya. Le nom Trouvelain — famille administrative des orphelins — les lie à jamais.",camp:"heros",fils:[0,4]},
+ {era:"B",per:"Jeunesse",t:"Les masques de Nadariel",d:"L'enfant battu des ruelles, le vétéran silencieux du Fil Rouge : sous mille visages, Nadariel orbite déjà autour de Visérya, qui ne le saura jamais.",camp:"culte",fils:[6,0]},
+ {era:"B",per:"Jeunesse",t:"La Nuit du Premier Hurlement",d:"Sylvana, plaines de Garh'Maal : première transformation en panthère, massacre des braconniers. La peur de sa propre puissance est née.",camp:"heros",fils:[2]},
+ {era:"B",per:"Jeunesse",t:"L'Envol Interdit",d:"Giovanni choisit la scène contre la lignée des peintres ravonniens : première scène, fuite du Conservatoire, le chant devant le Tableau Blanc révèle sa magie.",camp:"heros",fils:[1]},
+ {era:"B",per:"Années −X",t:"Visérya à la Section 66",d:"L'armée pour nourrir sa sœur, puis la section secrète : cheffe de mission. Un sens, une utilité, une famille de substitution.",camp:"heros",fils:[0]},
+ {era:"B",per:"Années −X",t:"La trahison de la Section 66",d:"Deux membres tués ; six survivants livrés à Maeridia et reconditionnés en Chiens de Garde. Le Traqueur, autre instrument brisé, passe aux mains de Nadariel.",camp:"antag",fils:[7,5,6],fl:["arb"]},
+ {era:"B",per:"Années −X",t:"Le massacre de la Fondation",d:"La Marque de Quentin naît d'une tuerie commanditée, accomplie avec méthode pour un seul salaire : le regard de sa mère (interlude 6 du T1).",camp:"antag",fils:[3,7]},
+ {era:"B",per:"Mois −X",t:"La Fracture de Valérya",d:"Le Doute, le Miroir, la Fracture : le Chaînon Noir recrute Valérya. Sa lettre d'adieu promet à sa sœur qu'elle sera « enfin fière ».",camp:"culte",fils:[4]},
+ {era:"B",per:"Mois −X",t:"La disparition",d:"Valérya s'évanouit. Face à l'inaction de ses supérieurs, Visérya brise ses serments, quitte l'armée et enquête seule.",camp:"heros",fils:[0,4]},
+/* C — Tome 1 */
+ {era:"C",per:"J0 · prologue",t:"Le sabotage du rituel",d:"Valérya, « la Traîtresse », fait échouer le rituel du Chaînon Noir et se retrouve scellée vivante dans le cristal. Le monde vient d'être sauvé une première fois — personne ne le sait.",camp:"heros",fils:[4],},
+ {era:"C",per:"J0 + sem.",t:"Port des Brumes : la rencontre",d:"Visérya croise les trois praetors. Dans les ruelles, un échange muet avec un enfant voleur — Nadariel, déjà là (micro-ajout acté).",camp:"heros",fils:[0,1,2,3,6]},
+ {era:"C",per:"J0 + sem.",t:"La cellule d'Andaren",d:"Julius Andaren, Meneur du Poing au Port des Brumes, réunit les Quatre autour des disparitions. La mission commence.",camp:"heros",fils:[0,1,2,3]},
+ {era:"C",per:"En parallèle",t:"Le Début de la Traque",d:"Le Traqueur relève la piste des Quatre, tue Kasiro, découvre le nom Trouvelain — et sent naître un élan de protection qu'il ne s'explique pas.",camp:"antag",fils:[5,6]},
+ {era:"C",per:"J0 + sem.",t:"Zannira, la Spirale",d:"Vanko Rav'Serr : « C'est fou ce qu'on entend quand on se tait. » Le casino livre sa piste — et pourrait baptiser le groupe (scène proposée).",camp:"heros",fils:[0,1,2,3],fl:["prop"]},
+ {era:"C",per:"J0 + mois",t:"Nal'Tharuun : le temple aux dioramas",d:"La jungle-frontière livre les fresques du dieu effacé. Un nom que nul ne prononce plus : Tharuun, l'Oublié, le Désaccordé.",camp:"heros",fils:[0,1,2,3]},
+ {era:"C",per:"J0 + mois",t:"Le Cirque de Pierre",d:"L'Ermite, presque fossile : « Le silence revient. Trois fois. » Première annonce d'une prophétie que le Tome 2 fera compter.",camp:"monde",fils:[9]},
+ {era:"C",per:"J0 + mois",t:"Nämir : trois vœux pour un piège",d:"Le djinn du Palais sans murs. Giovanni verrouille le jeu par son premier vœu — et contracte une dette dont il ignore le prix.",camp:"heros",fils:[1,0,2,3]},
+ {era:"C",per:"J0 + mois",t:"Le bastion de Kafwé Lumbata",d:"La carte du Sanctuaire Stellaire est arrachée à la forteresse ; le Traqueur frôle Visérya dans l'ombre des remparts.",camp:"heros",fils:[0,1,2,3,5]},
+ {era:"C",per:"Climax",t:"Le Sanctuaire hors du temps : la trahison",d:"Quentin égorge Sylvana au couteau rituel et s'empare de la Graine d'Obscidienne. Impulsion, non préméditation — des années de faim d'amour.",camp:"antag",fils:[3,2]},
+ {era:"C",per:"Climax",t:"La mort de Valérya",d:"Libérée du cristal, Valérya meurt dans les bras de sa sœur tandis que le sanctuaire se ré-ancre dans la jungle.",camp:"heros",fils:[4,0]},
+ {era:"C",per:"Climax",t:"Le pacte de la voix",d:"Giovanni offre sa voix à Nämir contre la vie de Sylvana. Elle respire à nouveau ; le barde ne chantera plus.",camp:"heros",fils:[1,2]},
+ {era:"C",per:"Épilogue",t:"Le retour du Fils prodigue",d:"Quentin rentre au château Valenth. Le miroir se fend ; l'ombre de Maeridia se referme sur lui. « Un héritier ou un monstre. »",camp:"antag",fils:[3,7]},
+/* D — Tome 2 tressé */
+ {era:"D",lane:1,per:"Sem. 1+",t:"Les Cryptes d'Accueil",d:"Maeridia livre son fils aux trois savants des cryptes. Quentin confond examens invasifs et preuve d'amour : « Je suis utile. »",camp:"antag",fils:[3,7]},
+ {era:"D",lane:1,per:"Sem. 2+",t:"L'Erreur Fossile",d:"L'Ermite du Cirque de Pierre, capturé par la Meute, devient le premier cobaye. Le transfert échoue ; les cauchemars de Quentin commencent.",camp:"antag",fils:[3,7]},
+ {era:"D",lane:1,per:"Sem. 3+",t:"La Proie et l'Échiquier",d:"Quentin livre les noms des survivants. Une requête de filiation alerte Maeridia : si Visérya fouille son sang, elle découvrira sa tante.",camp:"antag",fils:[7,3,0]},
+ {era:"D",lane:1,per:"Mois 1–2",t:"Miroirs Déformants",d:"Attentat simulé contre l'Archi-Scholar : Lueur, fausse Visérya, frappe et s'enfuit. Les Valenth sauveurs ; mandat secret d'élimination contre Visérya.",camp:"antag",fils:[7,0]},
+ {era:"D",lane:1,per:"Mois 2",t:"Masques et Mandats",d:"Cérémonie du Légat : l'Archi-Scholar entre en dette. Quentin, conquis, embrasse l'idéologie maternelle.",camp:"antag",fils:[7,3]},
+ {era:"D",lane:2,per:"J+1 → sem.",t:"Promesse à la morte",d:"Sur la tombe de Valérya, Visérya jure. La peine devient haine froide ; elle part seule sur la piste de Quentin.",camp:"heros",fils:[0,4]},
+ {era:"D",lane:2,per:"En parallèle",t:"La note de bas de page",d:"À Kharath-Den, Julius Andaren découvre les archives falsifiées et meurt sous les coups du Traqueur — non sans sceller un message différé vers Philistin.",camp:"antag",fils:[5,6]},
+ {era:"D",lane:2,per:"Sem.+",t:"La rencontre de Garde",d:"Un inconnu à la mémoire « verrouillée de l'intérieur » s'attache aux pas de Visérya. Le Traqueur, sans le savoir lui-même.",camp:"heros",fils:[0,5],},
+ {era:"D",lane:2,per:"Mois 1–2",t:"La Dame au Sang Noir & la cellule",d:"Visérya prend la tête d'un réseau insurrectionnel. L'affiche d'accusation la rattrape : elle assume le rôle et galvanise les siens.",camp:"heros",fils:[0,5]},
+ {era:"D",lane:2,per:"Mois 2–3",t:"Le jugement des crocs",d:"Embuscade de Carmin et Lueur aux abords du château. Garde à terre, Visérya condamnée… et les lames de Lueur qui, chaque fois, s'arrêtent.",camp:"antag",fils:[7,0,5]},
+ {era:"D",lane:3,per:"J+1 → sem.",t:"Le retour du Sanctuaire",d:"Réveil des trois survivants ; la tribu de Nal'Tharuun les recueille comme des figures divines. Le deuil, la séparation, la promesse de se retrouver.",camp:"heros",fils:[2,1,0]},
+ {era:"D",lane:3,per:"Sem.+",t:"Les racines de la promesse",d:"Sylvana guide Giovanni muet vers Kirasal, par songlines et légendes. Un langage de gestes naît entre eux — et autre chose, plus doux.",camp:"heros",fils:[2,1]},
+ {era:"D",lane:3,per:"Mois 1–2",t:"Les Larmes de Velmira",d:"La quête du remède : retrouver le Palais sans murs de Nämir et racheter la voix de Giovanni. Chaque pas rappelle le prix du murmure.",camp:"heros",fils:[2,1]},
+ {era:"D",lane:3,per:"Mois 2–3",t:"Le chant des balises",d:"Le duo renonce et bifurque : la promesse d'abord. Cap sur Valdarrin, vers Visérya et l'ancien frère d'armes devenu menace.",camp:"heros",fils:[2,1]},
+/* E — Arc IV */
+ {era:"E",per:"Mois 3",t:"Le pacte de l'œil crevé",d:"La Meute se fracture : Lueur, qui a reconnu en Visérya une survivante de la même douleur, se retourne contre les siens.",camp:"antag",fils:[7,0]},
+ {era:"E",per:"Mois 3",t:"Le trône des cendres",d:"Combat aux abords du château. Lueur, mourante, ouvre la brèche ; Visérya frappe. « Maman… va encore être déçue. » Quentin, lucide enfin, disculpe Garde et avoue n'avoir « suivi que la faille ».",camp:"heros",fils:[0,1,2,3,5,7,8]},
+ {era:"E",per:"Mois 3",t:"L'exécution de Maeridia",d:"Lueur entre seule au château, égorge la Matriarche défigurée par la magie de son fils, et s'accuse pour laver le nom de Visérya.",camp:"antag",fils:[7]},
+ {era:"E",per:"Épilogue",t:"Le dernier fragment",d:"Au sanctuaire ré-ancré, le fragment divin échappé de Quentin fusionne avec le cristal ; les sceaux se fissurent. Nadariel comprend : il suffit de tuer la foi.",camp:"culte",fils:[6]},
+/* F — Entre-deux */
+ {era:"F",per:"Après T2",t:"La naissance d'Orun",d:"Rituel du Miroir d'Obsidienne : Nadariel brûle ses masques un à un — y compris son obsession pour Visérya. « Tu es maintenant celui qui effacera les dieux. »",camp:"culte",fils:[6]},
+/* G — T3 Acte I */
+ {era:"G",per:"Années avant ?",t:"Le premier sermon de Qaz-Khet",d:"Sur la place du marché, une voix douce prêche l'Unique. Un porteur de fardeaux s'arrête quelques secondes — la première fissure. Datation liée à l'arbitrage (solution b recommandée : sermon antérieur au T2, prêché sous un autre masque).",camp:"culte",fils:[8,6],fl:["arb"]},
+ {era:"G",per:"Ellipse",t:"Les Mains tendues",d:"Des années plus tard, le cercle de l'hospice : soins, écoute, fraternité. Orun prédicateur ; le futur Nevarim trouve enfin une place.",camp:"culte",fils:[8,6],fl:["arb"]},
+ {era:"G",per:"Ellipse",t:"Brûlures silencieuses",d:"Le Synode interdit le culte. Rafles, délations de voisins, cinq exécutions aux Arènes du Jugement. Quelque chose, en lui, s'endurcit.",camp:"culte",fils:[8]},
+ {era:"G",per:"Ellipse",t:"L'effacement des pacifistes",d:"Huit anciens viennent plaider le retour au message premier. On les nourrit, on les escorte… « Le vent a tout repris. »",camp:"culte",fils:[8,6]},
+ {era:"G",per:"Bascule",t:"Feu sacré",d:"Keth'Zaman, cent mille fidèles : Nevarim sacré Champion de l'Unique. Le Voile du Dernier Souffle, la Lance du Jugement Unanime, le Cœur-Tambour. La guerre sainte est née.",camp:"culte",fils:[8,6]},
+ {era:"G",per:"Bascule",t:"Les Silences égorgés",d:"Massacre de la conférence de paix ; l'insigne du commandant du Poing brisé entre les doigts de Nevarim. Une carte de l'Est se déplie.",camp:"culte",fils:[8]},
+/* H — T3 Actes II-III */
+ {era:"H",per:"T2 + 3 mois",t:"Draykar, la clandestinité",d:"Les héros cachés à Thorngarde reprennent l'enquête des disparitions avec les notes d'Andaren. La mémoire de Garde reste verrouillée de l'intérieur.",camp:"heros",fils:[0,1,2,5]},
+ {era:"H",per:"T2 + 3 mois",t:"Lirhan démasqué",d:"Le benêt du quartier est un guetteur du second cercle. Il nomme les sceaux, la mission du Chaînon — et s'agenouille devant Giovanni : « Tu es un dieu, n'est-ce pas ? »",camp:"heros",fils:[0,1,2,5]},
+ {era:"H",per:"T2 + 3-4 mois",t:"Le dieu involontaire",d:"Quartier maudit de Draykar : la transe des indigents autour de Giovanni. Son culte naît sans lui — et dans la foule se tient déjà un futur bourreau.",camp:"heros",fils:[1,2]},
+ {era:"H",per:"Mois suivants",t:"La guerre franchit la mer",d:"Les ports de Ravonnia tombent. Fuite en ballon, tirs des planeurs, crash en terre étrangère ; les ombres du Chaînon Noir aux trousses.",camp:"monde",fils:[0,1,2,5,9]},
+ {era:"H",per:"Mois suivants",t:"La marche vers Nal'Tharuun",d:"Familles en fuite, greniers incendiés. Garde et Philistin s'épuisent quand les trois transformés ne faiblissent pas — le sanctuaire les a changés pour toujours.",camp:"heros",fils:[0,1,2,5]},
+/* I — T3 Acte IV */
+ {era:"I",per:"Veille",t:"La Jungle aux Dieux Morts",d:"Les tribus vénèrent les héros : visages gravés, offrandes — dont un écran fêlé, un disque noir, un cercle de cuir et de métal. Halte à la tombe de Valérya.",camp:"heros",fils:[0,1,2,5,9],fl:["sec"]},
+ {era:"I",per:"Veille",t:"La sève et la pierre",d:"Le sanctuaire corrompu s'est ouvert comme une fleur gangrenée. Défenses, pièges, serments gravés dans les troncs ; Philistin dévoile la Pierre de Digue.",camp:"heros",fils:[0,1,2,5]},
+ {era:"I",per:"Bataille",t:"La chute du masque",d:"Philistin brûle le masque d'Orun avec le bâton d'Andaren : Nadariel révélé. La riposte est immédiate — Philistin meurt ; Giovanni active la Pierre de Digue.",camp:"antag",fils:[6,1,5]},
+ {era:"I",per:"Bataille",t:"Le choix de Nevarim",d:"Le monologue de Garde — deux instruments brisés face à face, une main tendue dans l'abîme. Puis l'exécution, acceptée ; les artefacts déposés un à un.",camp:"heros",fils:[5,8,0]},
+ {era:"I",per:"Bataille",t:"Le Dernier Cercle",d:"Nadariel détruit par l'effort commun. Giovanni et Sylvana répètent le rituel entrevu dans les visions de Valérya : l'amour comme dernier sceau. Tharuun enseveli, le sanctuaire effondré.",camp:"heros",fils:[0,1,2,5,6]},
+ {era:"I",per:"Épilogue",t:"Ceux qui restent",d:"Funérailles de Philistin à la Cour d'Onyx. Visérya refuse la légende : « Pas pour que vous construisiez des statues. » Le pacte silencieux avec Garde — traquer ce qui reste du Chaînon.",camp:"heros",fils:[0,5]},
+ {era:"I",per:"Dernier plan",t:"La treizième clé",d:"Dans un désert qu'aucun atlas ne mentionne, une arche s'ouvre. Ailleurs, dans une chambre d'enfant : « Je crois… que je me souviens. » Le cycle suivant s'amorce.",camp:"monde",fils:[9],fl:["sec"]}
+];
+
+/* ————— état ————— */
+let activeTomes=new Set(), activeFils=new Set(), query="";
+
+/* ————— construction des filtres ————— */
+const fbar=document.getElementById("filters");
+const anchor1=fbar.querySelectorAll(".lbl")[1];
+TOMES.forEach(t=>{
+  const b=document.createElement("button");b.className="chip";b.dataset.kind="tome";b.textContent=t;
+  b.onclick=()=>{b.classList.toggle("on");b.classList.contains("on")?activeTomes.add(t):activeTomes.delete(t);render();};
+  fbar.insertBefore(b,anchor1);
+});
+const anchor2=document.getElementById("q");
+FILS.forEach((f,i)=>{
+  const b=document.createElement("button");b.className="chip";b.textContent=f;
+  b.onclick=()=>{b.classList.toggle("on");b.classList.contains("on")?activeFils.add(i):activeFils.delete(i);render();};
+  fbar.insertBefore(b,anchor2);
+});
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();render();});
+
+/* ————— filtres ————— */
+function visible(ev,era){
+  if(activeTomes.size && !activeTomes.has(era.tome))return false;
+  if(activeFils.size && !ev.fils.some(i=>activeFils.has(i)))return false;
+  if(query && !(ev.t+" "+ev.d).toLowerCase().includes(query))return false;
+  return true;
+}
+const FLAGL={arb:"à arbitrer",sec:"secret du monde",prop:"proposition"};
+
+function card(ev,era,laneColor){
+  const c=laneColor||CAMPS[ev.camp];
+  const flags=(ev.fl||[]).map(f=>`<span class="tag flag-${f==="arb"?"arb":f==="sec"?"sec":"prop"}">${FLAGL[f]}</span>`).join("");
+  const fils=ev.fils.map(i=>`<span class="tag">${FILS[i]}</span>`).join("");
+  return `<article class="evt" style="--c:${CAMPS[ev.camp]}" tabindex="0">
+    <div class="per">${ev.per} · <span class="tag tome" style="border:0;padding:0">${era.tome}</span></div>
+    <h3>${ev.t}</h3><p>${ev.d}</p>
+    <div class="tags">${fils}${flags}</div></article>`;
+}
+
+/* ————— rendu frise ————— */
+function render(){
+  const root=document.getElementById("frise");
+  let html="",shown=0;
+  ERAS.forEach(era=>{
+    const evs=E.filter(e=>e.era===era.id&&visible(e,era));
+    if(!evs.length)return;
+    shown+=evs.length;
+    const flag=era.flag?`<span class="era-flag">${era.flag}</span>`:"";
+    html+=`<section class="era"><div class="era-head"><span class="num">${era.num}</span><h2>${era.titre}</h2><span class="sub">${era.sub}</span>${flag}</div>`;
+    if(era.mode==="braid"){
+      html+=`<p class="braid-note">Les trois fils ci-dessous sont simultanés — le prologue (mort d'Andaren) se joue en parallèle des arcs.</p><div class="braid">`;
+      era.lanes.forEach(l=>{
+        const le=evs.filter(e=>e.lane===l.k);
+        html+=`<div class="lane" style="--lc:${l.c}"><div class="lane-head" style="--lc:${l.c}">${l.t}<small>${l.s}</small></div><div class="spine">`;
+        le.forEach(e=>html+=card(e,era,l.c));
+        html+=`</div></div>`;
+      });
+      html+=`</div><div class="converge">convergence — arc IV</div>`;
+    }else{
+      html+=`<div class="spine">`;
+      evs.forEach(e=>html+=card(e,era));
+      html+=`</div>`;
+    }
+    html+=`</section>`;
+  });
+  root.innerHTML=html;
+  document.getElementById("empty").style.display=shown?"none":"block";
+  document.getElementById("count").textContent=shown+" / "+E.length+" événements";
+}
+
+/* ————— carte mentale ————— */
+function buildCarte(){
+  const groups=[
+    {t:"L'Ère des Origines",c:"var(--bleu)",eras:["A"]},
+    {t:"Avant le Tome 1",c:"var(--bleu)",eras:["B"]},
+    {t:"Tome 1 — L'Alliance des Quatre",c:"var(--or)",eras:["C"]},
+    {t:"Tome 2 — Ascension (suite)",c:"var(--rouge)",eras:["D","E"],
+      sub:[{t:"Arc I — Ambition Valenth",f:e=>e.era==="D"&&e.lane===1,c:"var(--rouge)"},
+           {t:"Arc II — La Traque de l'Ombre",f:e=>e.era==="D"&&e.lane===2,c:"var(--or)"},
+           {t:"Arc III — Les Larmes de Velmira",f:e=>e.era==="D"&&e.lane===3,c:"var(--violet)"},
+           {t:"Arc IV — Le dénouement",f:e=>e.era==="E",c:"var(--rouge)"}]},
+    {t:"Entre les tomes",c:"var(--violet)",eras:["F"]},
+    {t:"Tome 3 — Le Jugement des Dieux",c:"var(--violet)",eras:["G","H","I"],
+      sub:[{t:"Acte I — L'Embrasement",f:e=>e.era==="G",c:"var(--violet)"},
+           {t:"Actes II & III — Le Chant et le Sceau",f:e=>e.era==="H",c:"var(--or)"},
+           {t:"Acte IV & épilogue — Le Dernier Feu",f:e=>e.era==="I",c:"var(--or)"}]}
+  ];
+  const leaf=e=>`<div class="mm-leaf" style="--c:${CAMPS[e.camp]}"><b>${e.t}</b><small>${e.per} — ${e.d}</small></div>`;
+  const node=(t,c,inner,count)=>`<div class="mm-node"><button class="mm-label" style="--c:${c}" aria-expanded="false"><span class="tw">▸</span>${t}<span class="n">${count}</span></button><div class="mm-children">${inner}</div></div>`;
+  let html=`<div class="mm-root"><span class="mm-label" style="cursor:default">✦ &nbsp;Ascension — la saga</span><div class="mm-children">`;
+  groups.forEach(g=>{
+    let inner="",n=0;
+    if(g.sub){
+      g.sub.forEach(s=>{const evs=E.filter(s.f);n+=evs.length;inner+=node(s.t,s.c,evs.map(leaf).join(""),evs.length+" évts");});
+    }else{
+      const evs=E.filter(e=>g.eras.includes(e.era));n=evs.length;inner=evs.map(leaf).join("");
+    }
+    html+=node(g.t,g.c,inner,n+" évts");
+  });
+  html+=`</div></div>`;
+  const c=document.getElementById("carte");c.innerHTML=html;
+  c.querySelectorAll(".mm-label").forEach(l=>{
+    if(l.tagName!=="BUTTON")return;
+    l.addEventListener("click",()=>{const nd=l.parentElement;nd.classList.toggle("open");l.setAttribute("aria-expanded",nd.classList.contains("open"));});
+  });
+  c.querySelectorAll(".mm-root>.mm-children>.mm-node").forEach(nd=>nd.classList.add("open"));
+}
+
+/* ————— bascule de vue ————— */
+const bF=document.getElementById("btnFrise"),bC=document.getElementById("btnCarte");
+function setView(v){
+  const frise=v==="frise";
+  document.getElementById("frise").style.display=frise?"block":"none";
+  document.getElementById("filters").style.display=frise?"flex":"none";
+  document.querySelector(".legend").style.display=frise?"flex":"none";
+  document.getElementById("empty").style.display="none";
+  document.getElementById("carte").style.display=frise?"none":"block";
+  bF.classList.toggle("on",frise);bC.classList.toggle("on",!frise);
+  bF.setAttribute("aria-selected",frise);bC.setAttribute("aria-selected",!frise);
+  if(frise)render();
+}
+bF.onclick=()=>setView("frise");
+bC.onclick=()=>setView("carte");
+
+render();buildCarte();
+</script>
+</body>
+</html>
